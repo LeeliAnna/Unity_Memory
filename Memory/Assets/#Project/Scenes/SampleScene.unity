@@ -439,6 +439,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5366982308679977631, guid: 166ddc9e9c4e1b9408729ba9b63feebc, type: 3}
     - target: {fileID: 1083291250725287427, guid: 33d9c498008717b4aa675614d30801c4, type: 3}
+      propertyPath: cardsManager
+      value: 
+      objectReference: {fileID: 657994069850999741, guid: 30108478d33531242bf6faa9ee129dcf, type: 3}
+    - target: {fileID: 1083291250725287427, guid: 33d9c498008717b4aa675614d30801c4, type: 3}
+      propertyPath: cardsManagerGene
+      value: 
+      objectReference: {fileID: 1841626753320605002, guid: 400531df877064344b2566b69221faa0, type: 3}
+    - target: {fileID: 1083291250725287427, guid: 33d9c498008717b4aa675614d30801c4, type: 3}
       propertyPath: colors.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -522,7 +530,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Initialiser
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

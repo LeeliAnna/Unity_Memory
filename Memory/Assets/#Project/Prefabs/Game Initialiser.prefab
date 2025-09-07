@@ -47,6 +47,6 @@ MonoBehaviour:
   rows: 2
   columns: 3
   gap: 0.5
-  cardPrefab: {fileID: 3431222976307737156, guid: 166ddc9e9c4e1b9408729ba9b63feebc, type: 3}
+  cardPrefab: {fileID: 5366982308679977631, guid: 166ddc9e9c4e1b9408729ba9b63feebc, type: 3}
   colors: []
-  cardsManager: {fileID: 5065180317981656476, guid: 30108478d33531242bf6faa9ee129dcf, type: 3}
+  cardsManager: {fileID: 657994069850999741, guid: 30108478d33531242bf6faa9ee129dcf, type: 3}

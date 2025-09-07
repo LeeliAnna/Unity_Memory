@@ -13,53 +13,33 @@ public class CardsManager : MonoBehaviour
         this.deck = deck;
 
         /// Exercice
-        int indexColor;
-        //Copie du tableau de couleurs en une liste
-        List<Color> colorsTmp = new List<Color>();
-        for (int i = 0; i < colors.Length; i++)
+        //Copie du tableau de couleurs en une liste et du deck
+        List<Color> colorsTmp = new List<Color>(colors);
+        List<CardBehavior> deckTmp = new List<CardBehavior>(deck);
+
+        // Tant qu'il reste des cartes à associer
+        while (deckTmp.Count > 0)
         {
-            colorsTmp.Add(colors[i]);
+            // Tire une couleur au hasard et la retire de la liste temporaire
+            int colorIndex = Random.Range(0, colorsTmp.Count);
+            Color rngColor = colorsTmp[colorIndex];
+            colorsTmp.RemoveAt(colorIndex);
+
+            // Tirage des 2 cartes aléatoirement et les retirer du deck temporaire
+            int firstCardIndex = Random.Range(0, deckTmp.Count);
+            CardBehavior firstCard = deckTmp[firstCardIndex];
+            deckTmp.RemoveAt(firstCardIndex);
+
+            int secondCardIndex = Random.Range(0, deckTmp.Count);
+            CardBehavior secondCard = deckTmp[secondCardIndex];
+            deckTmp.RemoveAt(secondCardIndex);
+
+            // Attribution de la couleurs aux 2 cartes
+            firstCard.Initialize(rngColor, firstCardIndex, this);
+            secondCard.Initialize(rngColor, secondCardIndex, this);
         }
 
-        // Création d'une lilste contenant les cartes dont la couleur a ete modifiée
-        List<CardBehavior> cardModified = new List<CardBehavior>();
-        //Initilisation variable pour les cartes random
-        int firstCard;
-        int secondCard;
 
-        // Boucle sur le tableau d'origine contenant toutes les cartes
-        for (int i = 0; i < deck.Count; i++)
-        { 
-            // Selectionne une 1ere carte au hasard
-            firstCard = Random.Range(0, deck.Count);
-            do
-            {
-                // selectionne une dexième et verifier qu'elle sont différentes
-                secondCard = Random.Range(0, deck.Count);
-            }
-            while (firstCard == secondCard);
-            Debug.Log($"First card : {firstCard}");
-            Debug.Log($"Second card : {secondCard}");
-
-            // Si ma liste de carte modifier ne contient pas les cartes selectionnées
-            if (!cardModified.Contains(deck[firstCard]) && !cardModified.Contains(deck[secondCard]))
-            {
-                Debug.Log("I modified cards");
-                // selectionne une couleur aléatoirement 
-                indexColor = Random.Range(0, colorsTmp.Count);
-                // Applique la couleurs aux cartes
-                deck[firstCard].Initialize(colors[indexColor], indexColor, this);
-                deck[secondCard].Initialize(colors[indexColor], indexColor, this);
-                // Ajoute les carde dans la liste de cartes modifier
-                Debug.Log("Ajout des cartes dans la liste de modification");
-                cardModified.Add(deck[firstCard]);
-                cardModified.Add(deck[secondCard]);
-                // Supprime la couleur de la liste temporaire
-                Debug.Log("Suppression de la couleur ajoutée");
-                colorsTmp.RemoveAt(indexColor);
-            }
-
-        }
 
         //Correction
         // int colorIndex;
