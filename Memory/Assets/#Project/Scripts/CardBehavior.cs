@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -15,13 +16,16 @@ public class CardBehavior : MonoBehaviour
     /// </summary>
     // Vector3.one = (1,1,1)
     [SerializeField] private Vector3 scaleOnFocus = Vector3.one * 1.5f;
+    [SerializeField] private float changeColorTime = 1f;
 
     /// <summary>
     /// Mémorisation du scale précédent
     /// </summary>
     private Vector3 memoScale;
     private Color color;
-    private int indexColor;
+    [SerializeField] private Color baseColor = Color.black;
+    public int IndexColor { get; private set; }
+    public bool IsFaceUp { get; private set; } = false;
     private CardsManager manager;
 
     private void OnMouseEnter()
@@ -35,6 +39,12 @@ public class CardBehavior : MonoBehaviour
         transform.localScale = memoScale;
     }
 
+    // Réagit uniqement lorsqu'on relache le click cela permet de verifier la différence d'etat entre le click et son relachement
+    private void OnMouseDown()
+    {
+        manager.CardIsClicked(this);
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -43,15 +53,53 @@ public class CardBehavior : MonoBehaviour
     public void Initialize(Color color, int indexColor, CardsManager manager)
     {
         this.color = color;
-        this.indexColor = indexColor;
+        IndexColor = indexColor;
         this.manager = manager;
-        
-        /// Temporary: it will be deleted when we will have finish the initialization.
-        ChangColor(color);
+
+        ChangeColor(baseColor);
+        IsFaceUp = false;
     }
-    private void ChangColor(Color color)
+    private void ChangeColor(Color color)
     {
         /// renderer est responsable du rendu a la caméra et a acces au material
         GetComponent<Renderer>().material.color = color;
     }
+
+    // change la couleur de base en couleur attribuée quand la carte est retournée
+    public void FaceUp()
+    {
+        StartCoroutine(ChangeColorWithLerp(color));
+        IsFaceUp = true;
+    }
+
+    // remet le couleur de base quand la carte est vas non visible
+    public void FaceDown()
+    {
+        StartCoroutine(ChangeColorWithLerp(baseColor));
+        IsFaceUp = false;
+    }
+
+    private IEnumerator ChangeColorWithLerp(Color color)
+    {
+        float chrono = 0f;
+        Color startColor = GetComponent<Renderer>().material.color;
+
+        while (chrono < changeColorTime)
+        {
+            // ajoute le temps passer depuis le debut de la coroutine
+            chrono += Time.deltaTime;
+
+            // Avec Chrono et changeColorTime on a ce qu'il nous faut pour utilsier Lerp
+            // Color c = Color.Lerp(startColor, color, chrono / changeColorTime);
+            // ChangeColor(c);
+
+            ChangeColor(Color.Lerp(startColor, color, chrono / changeColorTime));
+            yield return new WaitForEndOfFrame(); // => yield return null
+        }
+
+        // temporise s'il y a eu un gros lag
+        ChangeColor(color);
+    }
+
+
 }
