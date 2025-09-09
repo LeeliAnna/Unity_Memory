@@ -1,20 +1,26 @@
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CardsManager : MonoBehaviour
 {
+    [SerializeField] private float delayBeforeFaceDown = 1f;
     List<CardBehavior> deck;
     Color[] colors;
+    public int combinasonFound = 0;
 
     private CardBehavior memoCard = null;
+
+    private WinManager winManager;
+
     public void Initialize(List<CardBehavior> deck, Color[] colors)
     {
         this.colors = colors;
         this.deck = deck;
-        
+
         memoCard = null;
+        combinasonFound = 0;
 
         int colorIndex, cardIndex;
         List<int> colorsAlreadyInGame = new List<int>();
@@ -81,20 +87,33 @@ public class CardsManager : MonoBehaviour
 
     }
 
+
     public void CardIsClicked(CardBehavior card)
     {
+        if (card.IsFaceUp) return;
+        // Tout les réactions des cartes faces visible
+        card.FaceUp();
+
         // Surcharge d'opérateur sur les objets d'Unity ne pas utiliser is null
         // Si 'jai une carte mémorisée
         if (memoCard != null)
-        {   
+        {
             // si la carte memeo est la meme que la carte courante
-            if (card.IndexColor == memoCard.IndexColor)
+            if (card.IndexColor != memoCard.IndexColor)
             {
-                Debug.Log("Bravo!! Ce sont les mêmes.");
+                memoCard.FaceDown(delayBeforeFaceDown);
+                card.FaceDown(delayBeforeFaceDown);
             }
             else
             {
-                Debug.Log("Désolé, elles sont déiiférentes.");
+                combinasonFound++;
+                Debug.Log($"Number of cards is be finded : {combinasonFound}");
+                if (combinasonFound == deck.Count / 2)
+                {
+                    SceneManager.LoadScene("Victory Scene");
+                    //StartCoroutine(winManager.ChangeScene(2));
+                }
+
             }
 
             // Remet la carte memo a null
@@ -104,10 +123,11 @@ public class CardsManager : MonoBehaviour
         {
             memoCard = card;
         }
+    }
 
-        // Tout les réactions des cartes faces visible
-        card.FaceUp();
-
-
+    private IEnumerator ChangeScene(float delay = 0f)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene("Victory Scene");
     }
 }

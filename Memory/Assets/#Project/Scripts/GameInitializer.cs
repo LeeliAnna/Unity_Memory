@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameInitializer : MonoBehaviour
 {
@@ -25,12 +26,13 @@ public class GameInitializer : MonoBehaviour
     /// Permettre au game Initializer de connaitre le cards manager
     /// </summary>
     [SerializeField] private CardsManager cardsManager;
+    [SerializeField] private WinManager winManager;
 
-/// <summary>
-/// 1 verification
-/// 2 création
-/// 3 initialisation 
-/// </summary>
+    /// <summary>
+    /// 1 verification
+    /// 2 création
+    /// 3 initialisation 
+    /// </summary>
     private void Start()
     {
         // verification que le nombre total de cartes sera bien un nombre paire.
@@ -97,4 +99,10 @@ public class GameInitializer : MonoBehaviour
         ///Les initilisation des cartes sont faire dans la méthode initialize du Cards Managers
         cardsManager.Initialize(deck, colors);
     }
+
+    private void WonInitialisation()
+    {
+        winManager.Initialise();
+    }
+
 }

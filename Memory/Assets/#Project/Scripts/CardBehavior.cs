@@ -73,14 +73,17 @@ public class CardBehavior : MonoBehaviour
     }
 
     // remet le couleur de base quand la carte est vas non visible
-    public void FaceDown()
+    public void FaceDown(float delay = 0f)
     {
-        StartCoroutine(ChangeColorWithLerp(baseColor));
+        StartCoroutine(ChangeColorWithLerp(baseColor, delay));
         IsFaceUp = false;
     }
 
-    private IEnumerator ChangeColorWithLerp(Color color)
+    private IEnumerator ChangeColorWithLerp(Color color, float delay = 0f)
     {
+        // Avant toute chause attend un delay
+        yield return new WaitForSeconds(delay);
+
         float chrono = 0f;
         Color startColor = GetComponent<Renderer>().material.color;
 
