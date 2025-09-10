@@ -13,11 +13,13 @@ public class CardsManager : MonoBehaviour
     private CardBehavior memoCard = null;
 
     private WinManager winManager;
+    private VictoryManager victoryManager;
 
-    public void Initialize(List<CardBehavior> deck, Color[] colors)
+    public void Initialize(List<CardBehavior> deck, Color[] colors, VictoryManager victoryManager)
     {
         this.colors = colors;
         this.deck = deck;
+        this.victoryManager = victoryManager;
 
         memoCard = null;
         combinasonFound = 0;
@@ -107,10 +109,10 @@ public class CardsManager : MonoBehaviour
             else
             {
                 combinasonFound++;
-                Debug.Log($"Number of cards is be finded : {combinasonFound}");
                 if (combinasonFound == deck.Count / 2)
                 {
-                    SceneManager.LoadScene("Victory Scene");
+                    victoryManager.LaunchVictory();
+                    //SceneManager.LoadScene("Victory Scene");
                     //StartCoroutine(winManager.ChangeScene(2));
                 }
 

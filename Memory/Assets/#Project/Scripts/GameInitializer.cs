@@ -7,6 +7,8 @@ public class GameInitializer : MonoBehaviour
 {
     // le cube dans la scène représente 1
     const float CARD_SIZE = 1.0f;
+
+    [Header("Cards")]
     [SerializeField] private int rows = 2;
     [SerializeField] private int columns = 3;
     // Le gap permet d'avoir un espace entre chaque card qui vaut la moitier de la taille de la carte
@@ -26,7 +28,12 @@ public class GameInitializer : MonoBehaviour
     /// Permettre au game Initializer de connaitre le cards manager
     /// </summary>
     [SerializeField] private CardsManager cardsManager;
+
+    [Header("Victory")]
+    [Space]
     [SerializeField] private WinManager winManager;
+    [SerializeField] private VictoryManager victoryManager;
+    [SerializeField] private string victoryScene;
 
     /// <summary>
     /// 1 verification
@@ -92,12 +99,14 @@ public class GameInitializer : MonoBehaviour
         ///Card Manager va devenir son propre clone
         /// il se trouve dans le projet et va s'instancier 
         cardsManager = Instantiate(cardsManager);
+        victoryManager = Instantiate(victoryManager);
     }
 
     private void ObjectInitialisation()
     {
         ///Les initilisation des cartes sont faire dans la méthode initialize du Cards Managers
-        cardsManager.Initialize(deck, colors);
+        cardsManager.Initialize(deck, colors, victoryManager);
+        victoryManager.Initialize(victoryScene);
     }
 
     private void WonInitialisation()
